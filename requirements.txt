@@ -1,0 +1,12 @@
+pandas
+scikit-learn
+causalml
+duecredit
+fastapi
+uvicorn
+ipykernel
+seaborn
+boto3
+mlflow
+dotenv
+psycopg2-binary
