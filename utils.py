@@ -2,6 +2,18 @@ import os
 from dotenv import load_dotenv
 import mlflow
 from mlflow import MlflowClient
+import pandas as pd
+
+
+
+def split_data(
+    ratio: float, data: pd.DataFrame
+) -> tuple[pd.DataFrame, pd.DataFrame]:
+    offset = round(data["fecha_dato"].nunique()*ratio)
+    cutoff_date = data["fecha_dato"].min() + pd.DateOffset(months=offset)
+    train = data.query("fecha_dato<@cutoff_date")
+    test = data.query("fecha_dato>=@cutoff_date")
+    return train, test
 
 
 def setup_mlflow_client():
