@@ -4,7 +4,6 @@ import mlflow
 from mlflow import MlflowClient
 
 
-
 def setup_mlflow_client():
     load_dotenv()
 
@@ -16,6 +15,7 @@ def setup_mlflow_client():
     client = MlflowClient(tracking_uri=uri, registry_uri=uri)
 
     return client
+
 
 def setup_env():
     load_dotenv()
