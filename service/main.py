@@ -3,9 +3,19 @@ from fastapi import FastAPI, HTTPException
 from .events_store import EventStore
 from .recommendations_service import RecommendationService
 from contextlib import asynccontextmanager
+import os
 
 
 logger = logging.getLogger("uvicorn.error")
+
+model_path = os.getenv("MODEL_PATH","models/catboost_ranker.cbm")
+props_path = os.getenv("PROPS_PATH","range_features/item_props_last.parquet")
+als_assets_path = os.getenv("ALS_ASSETS_PATH","ALS_assets")
+top_rated_path = os.getenv("TOP_RATED_PATH","features_assets")
+last_k = int(os.getenv("LAST_K",5))
+n_als = int(os.getenv("N_ALS",20))
+n_sim = int(os.getenv("N_SIM",10))
+topn = int(os.getenv("TOPN",10))
 
 
 @asynccontextmanager
@@ -13,7 +23,16 @@ async def lifespan(app: FastAPI):
     # код ниже (до yield) выполнится только один раз при запуске сервиса
 
     # Создаем экземпляр RecommendationService
-    recommendation_service = RecommendationService()
+    recommendation_service = RecommendationService(
+        model_path = model_path,
+        props_path = props_path,
+        als_assets_path = als_assets_path,
+        top_rated_path = top_rated_path,
+        last_k = last_k,
+        n_als = n_als,
+        n_sim = n_sim,
+        topn = topn
+    )
 
     # Сохраняем экземпляр в app.state для использования в endpoint'ах
     app.state.recommendation_service = recommendation_service
