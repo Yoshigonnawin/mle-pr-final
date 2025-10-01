@@ -1,0 +1,20 @@
+services:
+  recommendation-service:
+    build: .
+    ports:
+      - "${MAIN_APP_PORT:-8000}:${MAIN_APP_PORT:-8000}"
+    environment:
+      - MAIN_APP_PORT=${MAIN_APP_PORT:-8000}
+      - MODEL_PATH=/app/models/catboost_ranker.cbm
+      - PROPS_PATH=/app/range_features/item_props_last.parquet
+      - ALS_ASSETS_PATH=/app/ALS_assets
+      - TOP_RATED_PATH=/app/features_assets
+      - LAST_K=5
+      - N_ALS=20
+      - N_SIM=10
+      - TOPN=10
+    volumes:
+      - ./models:/app/models:ro
+      - ./range_features:/app/range_features:ro
+      - ./ALS_assets:/app/ALS_assets:ro
+      - ./features_assets:/app/features_assets:ro
