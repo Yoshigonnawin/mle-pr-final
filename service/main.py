@@ -70,15 +70,15 @@ async def add_event(userid: str, itemid: str, event: str):
         raise HTTPException(status_code=500, detail=str(e))
 
 
-@app.get("/events/{user_id}")
-async def get_user_events(user_id: str, k: int = 10):
+@app.get("/events/{userid}")
+async def get_user_events(userid: str, k: int = 10):
     """
     Получает события пользователя
     """
     try:
-        events = events_store.get(user_id, k)
+        events = events_store.get(userid, k)
         return {"events": events}
     except Exception as e:
         logger.error(f"Error getting user events: {e}")
-        print(type(user_id))
+        print(type(userid))
         raise HTTPException(status_code=500, detail=str(e))
